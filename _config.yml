@@ -37,6 +37,7 @@ plainwhite:
   tagline: Developer.
   date_format: "%b %-d, %Y"
   search: true
+  dark_mode: true
   #portfolio_image:  "assets/portfolio.jpg"
   social_links:
     twitter: hebertrfreitas
