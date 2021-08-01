@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://hebertfreitas.com/</loc>
+    <lastmod>2021-08-01T00:30:00+00:00</lastmod>
+  </url><url>
+    <loc>https://hebertfreitas.com/posts/localstack/</loc>
+    <lastmod>2021-08-01T00:30:00+00:00</lastmod>
+  </url><url>
+    <loc>https://hebertfreitas.com/tags/localstack/</loc>
+    <lastmod>2021-08-01T00:30:00+00:00</lastmod>
+  </url><url>
+    <loc>https://hebertfreitas.com/posts/</loc>
+    <lastmod>2021-08-01T00:30:00+00:00</lastmod>
+  </url><url>
+    <loc>https://hebertfreitas.com/tags/</loc>
+    <lastmod>2021-08-01T00:30:00+00:00</lastmod>
+  </url><url>
+    <loc>https://hebertfreitas.com/categories/</loc>
+  </url>
+</urlset>
