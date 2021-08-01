@@ -35,6 +35,7 @@ editPost:
 
 
 
+
 Atualmente é bem comum trabalhar em projetos que se comuniquem com alguns serviços da aws, seja uma fila SQS, um bucket S3 para armazenar arquivos ou até mesmo um banco de dados DynamoDB.
 
 Durante o desenvolvimento deste software você irá precisar fazer a comunicação com estes serviços em nuvem da aws para testar o seu produto, simular cenários ou até mesmo executar alguns testes de integração.
