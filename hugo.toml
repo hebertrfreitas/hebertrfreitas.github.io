@@ -53,7 +53,7 @@ enableRobotsTXT = true
 
   # This title is used as the site_name on the Hugo's internal opengraph
   # structured data template
-  title = "Bear Cub"
+  title = "Hebert Freitas"
 
   # Dates are displayed following the format below. For more information about
   # formatting, see https://gohugo.io/functions/format/
@@ -68,7 +68,7 @@ enableRobotsTXT = true
   # "herman". The former is what you see on Bear Cub's demo (an optimized
   # version of Hugo Bear Blog), while the latter has a more modern look based on
   # Herman Martinus's version of the Blogster Minimal theme for Astro.
-  themeStyle = "original"
+  themeStyle = "herman"
 
   # (EXPERIMENTAL) This theme is capable of dynamically generating social cards
   # for posts that don't have `images` defined in their front matter; By setting
