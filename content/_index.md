@@ -10,6 +10,12 @@ I'm a brazilian sofware engineer.
 
 This website is a simple space to share my ideas, studies and anything else.
 
+What I'm doing now:
+
+- 🔭 I’m currently working building platforms that provide Generative AI features (LLM inference, RAG, agents, etc)
+- 🌱 I’m currently learning python ecosystem
+
+
 How to contact me:
 
  - [github](https://github.com/hebertrfreitas)
