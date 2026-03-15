@@ -4,6 +4,7 @@ theme = "hugo-bearcub"
 copyright = "Hebert Freitas"
 defaultContentLanguage = "en"
 
+
 # Generate a nice robots.txt for SEO
 enableRobotsTXT = true
 
