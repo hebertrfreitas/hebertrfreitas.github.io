@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Localstack on Hebert Freitas</title><link>https://hebertrfreitas.github.io/tags/localstack/</link><description>Recent content in Localstack on Hebert Freitas</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><managingEditor>hebertrfreitas@gmail.com (Hebert Freitas)</managingEditor><webMaster>hebertrfreitas@gmail.com (Hebert Freitas)</webMaster><copyright>Hebert Freitas</copyright><lastBuildDate>Sun, 13 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://hebertrfreitas.github.io/tags/localstack/index.xml" rel="self" type="application/rss+xml"/><item><title>Localstack - Um mock funcional para os serviços da aws</title><link>https://hebertrfreitas.github.io/blog/localstack/</link><pubDate>Sun, 13 Feb 2022 00:00:00 +0000</pubDate><author>hebertrfreitas@gmail.com (Hebert Freitas)</author><guid>https://hebertrfreitas.github.io/blog/localstack/</guid><description>&lt;p&gt;Atualmente é bem comum trabalhar em projetos que se comuniquem com alguns serviços da aws, seja uma fila SQS, um bucket S3 para armazenar arquivos ou até mesmo um banco de dados DynamoDB.&lt;/p&gt;
+&lt;p&gt;Durante o desenvolvimento deste software você irá precisar fazer a comunicação com estes serviços em nuvem da aws para testar o seu produto, simular cenários ou até mesmo executar alguns testes de integração.&lt;/p&gt;
+&lt;p&gt;No entanto, nem sempre você terá disponível um ambiente na aws onde você possa alterar livremente de maneira que atenda os requisitos do desenvolvimento, ou mesmo que tenha, pode ser complexo fazer a comunicação em um primeiro momento.&lt;/p&gt;</description><content:encoded><![CDATA[<p>Atualmente é bem comum trabalhar em projetos que se comuniquem com alguns serviços da aws, seja uma fila SQS, um bucket S3 para armazenar arquivos ou até mesmo um banco de dados DynamoDB.</p>
+<p>Durante o desenvolvimento deste software você irá precisar fazer a comunicação com estes serviços em nuvem da aws para testar o seu produto, simular cenários ou até mesmo executar alguns testes de integração.</p>
+<p>No entanto, nem sempre você terá disponível um ambiente na aws onde você possa alterar livremente de maneira que atenda os requisitos do desenvolvimento, ou mesmo que tenha, pode ser complexo fazer a comunicação em um primeiro momento.</p>
+<p>Para resolver estes problemas, existe o projeto <a href="https://github.com/localstack/localstack">localstack</a>, que fornece um mock dos principais servicos da AWS como SQS, SNS, S3 entre outros.</p>
+<h3 id="como-usar-o-localstack">Como usar o localstack</h3>
+<p>A forma mais conveniente de executar o projeto é através de uma imagem docker oficial disponível neste link:  <a href="https://hub.docker.com/r/localstack/localstack">dockerhub localstack</a>, segue um exemplo de um arquivo do docker-compose:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.8&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="w">  </span><span class="nt">localstack</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;localstack&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">localstack/localstack:0.12.11</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">      </span>- <span class="s2">&#34;4566:4566&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">      </span>- <span class="s2">&#34;4571:4571&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">      </span>- <span class="l">SERVICES=sqs,s3</span></span></span></code></pre></div><p>Para executar este arquivo crie um arquivo yaml chamado docker-compose.yaml com o conteúdo acima e execute o comando <code>docker-compose up</code> na mesma pasta do arquivo criado.</p>
+<p>Alguns pontos importantes a se destacar:</p>
+<ul>
+<li>neste exemplo estamos usando a versão 0.12.11 mas você pode e deve checar qual versão mais atualizada está disponível no docker hub do projeto.</li>
+<li>a variável de ambiente <code>SERVICES</code> aceita uma lista de nomes dos serviços que desejamos provisionar, neste exemplo estamos pedindo ao localstack para disponibilizar uma api do SQS e uma do S3.</li>
+</ul>
+<h3 id="interagindo-com-os-serviços-da-aws-no-localstack">Interagindo com os serviços da aws no localstack</h3>
+<p>Uma das formas oficiais de se comunicar com os serviços da aws é o <a href="https://hub.docker.com/r/localstack/localstack">AWS CLI</a></p>
+<p>Você pode ter o awscli instalado na sua máquina e apontar para os serviços da aws mockados no localstack.
+Para fazer isso basta inserir em todos os comando o seguinte parâmetro: <code>--endpoint-url=http://localstack:4566</code></p>
+<p>Exemplo de criação de uma queue no SQS:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="ln">1</span><span class="cl">aws --endpoint-url<span class="o">=</span>http://localhost:4566 sqs create-queue --queue-name teste</span></span></code></pre></div><p>No entanto, caso você não queria ou não precise ter o <code>awscli</code> instalado no seu computador, o localstack já disponibiliza um wrapper do <code>awscli</code> chamado <code>awslocal</code> que já vem pré-configurado para interagir localmente com os serviços mockados da aws.</p>
+<p>Considerando que você esteja executando o projeto via docker é possível fazer o mesmo exemplo citado acima da seguinte maneira:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">#para entrar no container (considerando que o nome do seu container é localstack)</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">docker <span class="nb">exec</span> -it localstack sh
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1">#comando equivalente ao apresentado acima para criar uma fila </span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">awslocal sqs create-queue --queue-name teste </span></span></code></pre></div><p>Observe que não precisamos adicionar o parâmetro <code>--endpoint-url</code> pois o <code>awslocal</code> já está configurado assumindo que desejo me comunicar com os serviços localmente.</p>
+<blockquote>
+<p><strong>⚠ Porque localhost:4566 ?</strong><br>
+O projeto localstack disponibiliza o mock dos serviços da aws na porta 4566.</p>
+<p>Considerando que você está executando o projeto via docker é importante que você mapeie a porta 4566 do container para a 4566(ou outra a seu critério) da sua máquina local, foi isso que fizemos no arquivo de exemplo do docker-compose.</p>
+</blockquote>
+<h3 id="como-executar-comandos-no-startup-do-container">Como executar comandos no startup do container</h3>
+<p>Caso você queira executar comandos após o startup do container como criar um bucket no s3 ou inicializar uma fila sqs basta criar um arquivo .sh com a lista de comandos e montá-lo como volume na pasta <code>/docker-entrypoint-initaws.d</code> dentro do container.</p>
+<p>Ao iniciar, o localstack irá executar todos os scripts existentes neste caminho.
+Sendo assim nosso docker-compose ficaria com a seguinte configuração:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="w">    </span><span class="nt">localstack</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="w">      </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;localstack&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">localstack/localstack:0.12.11</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">      </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="w">        </span>- <span class="s2">&#34;4566:4566&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">        </span>- <span class="s2">&#34;4571:4571&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">      </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">        </span>- <span class="l">SERVICES=sqs,s3</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w"> 
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">        </span>- <span class="l">./init-scripts:/docker-entrypoint-initaws.d</span><span class="w"> </span><span class="c">#mapeamento do volume</span></span></span></code></pre></div><p>Agora podemos criar a pasta <code>init-scripts</code> na raiz do projeto e um arquivo shell script <code>startup.sh</code> dentro dela com alguns comandos por exemplo:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="ln">1</span><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;creating test bucket&#39;</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">awslocal s3api create-bucket --bucket test-bucket
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;listing buckets&#39;</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">awslocal s3api list-buckets</span></span></code></pre></div><p>A estrutura do projeto deverá ficar da seguinte maneira:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="ln">1</span><span class="cl"> .
+</span></span><span class="line"><span class="ln">2</span><span class="cl">├── docker-compose.yaml
+</span></span><span class="line"><span class="ln">3</span><span class="cl">└── init-scripts
+</span></span><span class="line"><span class="ln">4</span><span class="cl">    └── startup.sh</span></span></code></pre></div><p>Se executar o comando <code>docker-compose up</code> após o startup inicial você verá as mensagens do script sendo executado.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1627764858619/9HfzKFprK.png" alt="Screen Shot 2021-07-31 at 17.53.36.png"></p>
+<p>O conteúdo deste post está disponível no github no endereço: <a href="https://github.com/hebertrfreitas/localstack-docker">https://github.com/hebertrfreitas/localstack-docker</a></p>
+]]></content:encoded></item></channel></rss>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>K8s on Hebert Freitas</title><link>https://hebertrfreitas.github.io/tags/k8s/</link><description>Recent content in K8s on Hebert Freitas</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><managingEditor>hebertrfreitas@gmail.com (Hebert Freitas)</managingEditor><webMaster>hebertrfreitas@gmail.com (Hebert Freitas)</webMaster><copyright>Hebert Freitas</copyright><lastBuildDate>Tue, 22 Apr 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://hebertrfreitas.github.io/tags/k8s/index.xml" rel="self" type="application/rss+xml"/><item><title>Simulando um cluster k8s localmente com Kind</title><link>https://hebertrfreitas.github.io/blog/local-k8s-with-kind/</link><pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate><author>hebertrfreitas@gmail.com (Hebert Freitas)</author><guid>https://hebertrfreitas.github.io/blog/local-k8s-with-kind/</guid><description>&lt;p&gt;Kubernetes é uma realidade bem difundida atualmente. Os principais cloud providers oferecem soluções built-in como o EKS na AWS ou o AKS na Azure.
+Do ponto de vista do desenvolvedor tradicional, suas aplicações devem ser construídas e preparadas para executar em containers, e em algum momento (geralmente em uma pipeline de CI/CD) o container desta aplicação será implantado em um cluster k8s.&lt;/p&gt;
+&lt;p&gt;No entanto, seja por necessidade de conhecer melhor a infraestrutura do k8s (o que recomendo que todo desenvolvedor conheça profundamente se trabalha com aplicações dentro dele), ou seja porque você precisa simular ou testar algum recurso, pode ser necessário efetivamente fazer o deploy do container no ambiente com pods, deployments, services, e toda a estrutura necessária para rodar em um cluster kubernetes.
+Além disso, nem sempre existe a possibilidade de você fazer o deploy de fato em um ambiente em cloud para simular uma situação específica, ou as vezes você só quer fazer um teste de algo rápido.&lt;/p&gt;</description><content:encoded><![CDATA[<p>Kubernetes é uma realidade bem difundida atualmente. Os principais cloud providers oferecem soluções built-in como o EKS na AWS ou o AKS na Azure.
+Do ponto de vista do desenvolvedor tradicional, suas aplicações devem ser construídas e preparadas para executar em containers, e em algum momento (geralmente em uma pipeline de CI/CD) o container desta aplicação será implantado em um cluster k8s.</p>
+<p>No entanto, seja por necessidade de conhecer melhor a infraestrutura do k8s (o que recomendo que todo desenvolvedor conheça profundamente se trabalha com aplicações dentro dele), ou seja porque você precisa simular ou testar algum recurso, pode ser necessário efetivamente fazer o deploy do container no ambiente com pods, deployments, services, e toda a estrutura necessária para rodar em um cluster kubernetes.
+Além disso, nem sempre existe a possibilidade de você fazer o deploy de fato em um ambiente em cloud para simular uma situação específica, ou as vezes você só quer fazer um teste de algo rápido.</p>
+<p>Já a alguns anos existem projetos que simulam um cluster k8s em sua máquina local, hoje vou apresentar um que atende muito bem os meus requisitos que é o <a href="https://kind.sigs.k8s.io/">Kind</a></p>
+<h2 id="kind">Kind</h2>
+<p>O kind é uma ferramenta que executa um cluster kubernetes na sua máquina com o uso de docker.
+Basicamente ela cria um cluster k8s com os nodes e control plane sendo executados em containers docker.
+Para executar o kind você precisa das seguintes ferramentas instaladas e funcionando:</p>
+<ul>
+<li>docker</li>
+<li>kubectl (para iteragir com o cluster)</li>
+</ul>
+<h3 id="instalação">Instalação</h3>
+<p>Recomendo seguir as <a href="https://kind.sigs.k8s.io/#installation-and-usage">instruções oficiais para instalação do kind</a>.
+Ele pode ser instalado como um pacote do golang.
+Em um mac pode ser instalado via brew executando:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">brew install kind</span></span></code></pre></div><h3 id="criando-clusters">Criando clusters</h3>
+<p>Você pode criar um cluster k8s simplesmente executando:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">kind create cluster</span></span></code></pre></div><p>Por padrão, este comando criará um cluster com um único nós, mas se você quiser criar um cluster com múltiplos nós você pode usar um arquivo yaml como este:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln">1</span><span class="cl"><span class="c">#kind-multinode-cluster.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kind.x-k8s.io/v1alpha4</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="nt">nodes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl">- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">control-plane</span><span class="w">
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl">- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span><span class="w">
+</span></span></span><span class="line"><span class="ln">7</span><span class="cl">- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span></span></span></code></pre></div><p>e então executar o comando:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">kind create cluster --config kind-multinode-cluster.yaml</span></span></code></pre></div><p>Quando você cria um cluster no kind ele também já adiciona um contexto no seu arquivo de configuração do kubectl (geralmente em <code>~/.kube/config</code>) apontando para as configurações do seu cluster local, portanto logo depois da criação do cluster basta executar comandos do kubectl tradicionais, por exemplo:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">kubectl cluster-info <span class="c1">#exibe as informações do cluster</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">kubectl get nodes <span class="c1">#exibe as informações dos nodes do cluster</span></span></span></code></pre></div><h3 id="load-balancers-no-kind">Load Balancers no Kind</h3>
+<p>Quando você precisa expor um determinado serviço no kubernetes é comum criar um Service do tipo Load Balancer.
+Quando você está usando uma solução de kubernetes em um cloud provider como AWS ou Azure, automaticamente ao criar este Load Balancer um IP é fornecido e você consegue acessar o serviço pelo IP e porta.
+Ocorre que no kind, você está rodando localmente em sua máquina, portanto é preciso que alguma outra ferramenta faça este papel, para isso existe o <a href="https://github.com/kubernetes-sigs/cloud-provider-kind?tab=readme-ov-file#install">Kubernetes Cloud Provider for KIND</a>
+Recomendo fortemente que você instale ele para que seja possível expor serviços em um IP e porta para teste.
+Lembrando que após a instalação você precisa <a href="https://github.com/kubernetes-sigs/cloud-provider-kind?tab=readme-ov-file#running-the-provider">executar o binário do provider</a> enquanto estiver provisionando serviços no cluster k8s.</p>
+<h3 id="fazendo-o-deploy-de-um-serviço-no-cluster">Fazendo o deploy de um serviço no cluster</h3>
+<p>A partir deste ponto, você já pode fazer o deploy de qualquer serviço no seu cluster k8s localmente, para exemplificar segue um arquivo yaml contendo deployment, especificação de pods e service do tipo Load Balancer para uma api de teste em python fast-api</p>
+<p>O código desta api está disponível <a href="https://github.com/hebertrfreitas/fastapi-example">neste projeto</a> e a mesma possui uma pipeline de CI/CD no github actions que faz o push de uma imagem docker para o docker hub.</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c">#simple-api-deployment.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api</span><span class="w">
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api</span><span class="w">
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">hebertrfreitas/fastapi-example:latest</span><span class="w">
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="w">        </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="w">        </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="w">        </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/health</span><span class="w">
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="w">          </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="w">        </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/health</span><span class="w">
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="w">          </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api-deployment</span><span class="w">
+</span></span></span><span class="line"><span class="ln">38</span><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">39</span><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">LoadBalancer</span><span class="w">
+</span></span></span><span class="line"><span class="ln">40</span><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api</span><span class="w">
+</span></span></span><span class="line"><span class="ln">42</span><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">43</span><span class="cl"><span class="w">  </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="ln">44</span><span class="cl"><span class="w">    </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span></span></span></code></pre></div><p>Para aplicar no cluster basta executar:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">kubectl apply -f simple-api-deployment.yaml</span></span></code></pre></div><p>Em seguida para chamar e testar o serviço use os seguintes comandos:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">#obtem o IP do load balancer</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nv">POKEMON_API_IP</span><span class="o">=</span><span class="k">$(</span>kubectl get svc pokemon-api-deployment -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.loadBalancer.ingress[0].ip}&#39;</span><span class="k">)</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1">#faz uma chamada na rota /pokemon da aplicação, que chama uma API externa e faz um request para trazer os dados de um pokemon aleatório</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">curl http://<span class="nv">$POKEMON_API_IP</span>/pokemon</span></span></code></pre></div><h3 id="projeto-no-github">Projeto no github</h3>
+<p>Se quiser testar todos os comandos e códigos que usei neste post, eles estão disponíveis neste repositorio no github:
+<a href="https://github.com/hebertrfreitas/kind-labs">https://github.com/hebertrfreitas/kind-labs</a></p>
+]]></content:encoded></item></channel></rss>

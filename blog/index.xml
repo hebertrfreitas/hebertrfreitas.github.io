@@ -1,14 +1,565 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Blog on Hebert Freitas</title><link>https://hebertrfreitas.github.io/blog/</link><description>Recent content in Blog on Hebert Freitas</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><managingEditor>hebertrfreitas@gmail.com (Hebert Freitas)</managingEditor><webMaster>hebertrfreitas@gmail.com (Hebert Freitas)</webMaster><copyright>Hebert Freitas</copyright><lastBuildDate>Tue, 05 Mar 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://hebertrfreitas.github.io/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Emoji Support</title><link>https://hebertrfreitas.github.io/blog/emoji-support/</link><pubDate>Tue, 05 Mar 2019 00:00:00 +0000</pubDate><author>hebertrfreitas@gmail.com (Hebert Freitas)</author><guid>https://hebertrfreitas.github.io/blog/emoji-support/</guid><description>&lt;p&gt;Emoji can be enabled in a Hugo project in a number of ways.&lt;/p&gt;</description><content:encoded><![CDATA[<p>Emoji can be enabled in a Hugo project in a number of ways.</p>
-<p>The <a href="https://gohugo.io/functions/emojify/"><code>emojify</code></a> function can be called directly in templates or <a href="https://gohugo.io/templates/shortcode-templates/#inline-shortcodes">Inline Shortcodes</a>.</p>
-<p>To enable emoji globally, set <code>enableEmoji</code> to <code>true</code> in your site&rsquo;s <a href="https://gohugo.io/getting-started/configuration/">configuration</a> and then you can type emoji shorthand codes directly in content files; e.g.</p>
-<!-- raw HTML omitted -->
-<p>The <a href="http://www.emoji-cheat-sheet.com/">Emoji cheat sheet</a> is a useful reference for emoji shorthand codes.</p>
-<hr>
-<p><strong>N.B.</strong> The above steps enable Unicode Standard emoji characters and sequences in Hugo, however the rendering of these glyphs depends on the browser and the platform. To style the emoji you can either use a third party emoji font or a font stack; e.g.</p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Blog on Hebert Freitas</title><link>https://hebertrfreitas.github.io/blog/</link><description>Recent content in Blog on Hebert Freitas</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><managingEditor>hebertrfreitas@gmail.com (Hebert Freitas)</managingEditor><webMaster>hebertrfreitas@gmail.com (Hebert Freitas)</webMaster><copyright>Hebert Freitas</copyright><lastBuildDate>Tue, 22 Apr 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://hebertrfreitas.github.io/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Simulando um cluster k8s localmente com Kind</title><link>https://hebertrfreitas.github.io/blog/local-k8s-with-kind/</link><pubDate>Tue, 22 Apr 2025 00:00:00 +0000</pubDate><author>hebertrfreitas@gmail.com (Hebert Freitas)</author><guid>https://hebertrfreitas.github.io/blog/local-k8s-with-kind/</guid><description>&lt;p&gt;Kubernetes é uma realidade bem difundida atualmente. Os principais cloud providers oferecem soluções built-in como o EKS na AWS ou o AKS na Azure.
+Do ponto de vista do desenvolvedor tradicional, suas aplicações devem ser construídas e preparadas para executar em containers, e em algum momento (geralmente em uma pipeline de CI/CD) o container desta aplicação será implantado em um cluster k8s.&lt;/p&gt;
+&lt;p&gt;No entanto, seja por necessidade de conhecer melhor a infraestrutura do k8s (o que recomendo que todo desenvolvedor conheça profundamente se trabalha com aplicações dentro dele), ou seja porque você precisa simular ou testar algum recurso, pode ser necessário efetivamente fazer o deploy do container no ambiente com pods, deployments, services, e toda a estrutura necessária para rodar em um cluster kubernetes.
+Além disso, nem sempre existe a possibilidade de você fazer o deploy de fato em um ambiente em cloud para simular uma situação específica, ou as vezes você só quer fazer um teste de algo rápido.&lt;/p&gt;</description><content:encoded><![CDATA[<p>Kubernetes é uma realidade bem difundida atualmente. Os principais cloud providers oferecem soluções built-in como o EKS na AWS ou o AKS na Azure.
+Do ponto de vista do desenvolvedor tradicional, suas aplicações devem ser construídas e preparadas para executar em containers, e em algum momento (geralmente em uma pipeline de CI/CD) o container desta aplicação será implantado em um cluster k8s.</p>
+<p>No entanto, seja por necessidade de conhecer melhor a infraestrutura do k8s (o que recomendo que todo desenvolvedor conheça profundamente se trabalha com aplicações dentro dele), ou seja porque você precisa simular ou testar algum recurso, pode ser necessário efetivamente fazer o deploy do container no ambiente com pods, deployments, services, e toda a estrutura necessária para rodar em um cluster kubernetes.
+Além disso, nem sempre existe a possibilidade de você fazer o deploy de fato em um ambiente em cloud para simular uma situação específica, ou as vezes você só quer fazer um teste de algo rápido.</p>
+<p>Já a alguns anos existem projetos que simulam um cluster k8s em sua máquina local, hoje vou apresentar um que atende muito bem os meus requisitos que é o <a href="https://kind.sigs.k8s.io/">Kind</a></p>
+<h2 id="kind">Kind</h2>
+<p>O kind é uma ferramenta que executa um cluster kubernetes na sua máquina com o uso de docker.
+Basicamente ela cria um cluster k8s com os nodes e control plane sendo executados em containers docker.
+Para executar o kind você precisa das seguintes ferramentas instaladas e funcionando:</p>
+<ul>
+<li>docker</li>
+<li>kubectl (para iteragir com o cluster)</li>
+</ul>
+<h3 id="instalação">Instalação</h3>
+<p>Recomendo seguir as <a href="https://kind.sigs.k8s.io/#installation-and-usage">instruções oficiais para instalação do kind</a>.
+Ele pode ser instalado como um pacote do golang.
+Em um mac pode ser instalado via brew executando:</p>
 
 
 
 
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="ln">1</span><span class="cl">.emoji {
-</span></span><span class="line"><span class="ln">2</span><span class="cl">  font-family: Apple Color Emoji, Segoe UI Emoji, NotoColorEmoji, Segoe UI Symbol, Android Emoji, EmojiSymbols;
-</span></span><span class="line"><span class="ln">3</span><span class="cl">}</span></span></code></pre></div>]]></content:encoded></item></channel></rss>
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">brew install kind</span></span></code></pre></div><h3 id="criando-clusters">Criando clusters</h3>
+<p>Você pode criar um cluster k8s simplesmente executando:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">kind create cluster</span></span></code></pre></div><p>Por padrão, este comando criará um cluster com um único nós, mas se você quiser criar um cluster com múltiplos nós você pode usar um arquivo yaml como este:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln">1</span><span class="cl"><span class="c">#kind-multinode-cluster.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kind.x-k8s.io/v1alpha4</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="nt">nodes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl">- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">control-plane</span><span class="w">
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl">- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span><span class="w">
+</span></span></span><span class="line"><span class="ln">7</span><span class="cl">- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span></span></span></code></pre></div><p>e então executar o comando:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">kind create cluster --config kind-multinode-cluster.yaml</span></span></code></pre></div><p>Quando você cria um cluster no kind ele também já adiciona um contexto no seu arquivo de configuração do kubectl (geralmente em <code>~/.kube/config</code>) apontando para as configurações do seu cluster local, portanto logo depois da criação do cluster basta executar comandos do kubectl tradicionais, por exemplo:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">kubectl cluster-info <span class="c1">#exibe as informações do cluster</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">kubectl get nodes <span class="c1">#exibe as informações dos nodes do cluster</span></span></span></code></pre></div><h3 id="load-balancers-no-kind">Load Balancers no Kind</h3>
+<p>Quando você precisa expor um determinado serviço no kubernetes é comum criar um Service do tipo Load Balancer.
+Quando você está usando uma solução de kubernetes em um cloud provider como AWS ou Azure, automaticamente ao criar este Load Balancer um IP é fornecido e você consegue acessar o serviço pelo IP e porta.
+Ocorre que no kind, você está rodando localmente em sua máquina, portanto é preciso que alguma outra ferramenta faça este papel, para isso existe o <a href="https://github.com/kubernetes-sigs/cloud-provider-kind?tab=readme-ov-file#install">Kubernetes Cloud Provider for KIND</a>
+Recomendo fortemente que você instale ele para que seja possível expor serviços em um IP e porta para teste.
+Lembrando que após a instalação você precisa <a href="https://github.com/kubernetes-sigs/cloud-provider-kind?tab=readme-ov-file#running-the-provider">executar o binário do provider</a> enquanto estiver provisionando serviços no cluster k8s.</p>
+<h3 id="fazendo-o-deploy-de-um-serviço-no-cluster">Fazendo o deploy de um serviço no cluster</h3>
+<p>A partir deste ponto, você já pode fazer o deploy de qualquer serviço no seu cluster k8s localmente, para exemplificar segue um arquivo yaml contendo deployment, especificação de pods e service do tipo Load Balancer para uma api de teste em python fast-api</p>
+<p>O código desta api está disponível <a href="https://github.com/hebertrfreitas/fastapi-example">neste projeto</a> e a mesma possui uma pipeline de CI/CD no github actions que faz o push de uma imagem docker para o docker hub.</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="c">#simple-api-deployment.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api</span><span class="w">
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api</span><span class="w">
+</span></span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">hebertrfreitas/fastapi-example:latest</span><span class="w">
+</span></span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="w">        </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="w">        </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="w">        </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">23</span><span class="cl"><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/health</span><span class="w">
+</span></span></span><span class="line"><span class="ln">24</span><span class="cl"><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="ln">25</span><span class="cl"><span class="w">          </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span></span></span><span class="line"><span class="ln">26</span><span class="cl"><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span></span></span><span class="line"><span class="ln">27</span><span class="cl"><span class="w">        </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">28</span><span class="cl"><span class="w">          </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">29</span><span class="cl"><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/health</span><span class="w">
+</span></span></span><span class="line"><span class="ln">30</span><span class="cl"><span class="w">            </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="ln">31</span><span class="cl"><span class="w">          </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span></span></span><span class="line"><span class="ln">32</span><span class="cl"><span class="w">          </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span></span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="ln">35</span><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="ln">36</span><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">37</span><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api-deployment</span><span class="w">
+</span></span></span><span class="line"><span class="ln">38</span><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">39</span><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">LoadBalancer</span><span class="w">
+</span></span></span><span class="line"><span class="ln">40</span><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">41</span><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">pokemon-api</span><span class="w">
+</span></span></span><span class="line"><span class="ln">42</span><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">43</span><span class="cl"><span class="w">  </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="ln">44</span><span class="cl"><span class="w">    </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span></span></span></code></pre></div><p>Para aplicar no cluster basta executar:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl">kubectl apply -f simple-api-deployment.yaml</span></span></code></pre></div><p>Em seguida para chamar e testar o serviço use os seguintes comandos:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">#obtem o IP do load balancer</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="nv">POKEMON_API_IP</span><span class="o">=</span><span class="k">$(</span>kubectl get svc pokemon-api-deployment -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.loadBalancer.ingress[0].ip}&#39;</span><span class="k">)</span>
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="c1">#faz uma chamada na rota /pokemon da aplicação, que chama uma API externa e faz um request para trazer os dados de um pokemon aleatório</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">curl http://<span class="nv">$POKEMON_API_IP</span>/pokemon</span></span></code></pre></div><h3 id="projeto-no-github">Projeto no github</h3>
+<p>Se quiser testar todos os comandos e códigos que usei neste post, eles estão disponíveis neste repositorio no github:
+<a href="https://github.com/hebertrfreitas/kind-labs">https://github.com/hebertrfreitas/kind-labs</a></p>
+]]></content:encoded></item><item><title>Montando um ambiente local para testar LLM's OpenSource</title><link>https://hebertrfreitas.github.io/blog/local-environment-to-test-llms/</link><pubDate>Wed, 19 Feb 2025 00:00:00 +0000</pubDate><author>hebertrfreitas@gmail.com (Hebert Freitas)</author><guid>https://hebertrfreitas.github.io/blog/local-environment-to-test-llms/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;Estou iniciando uma série de artigos para compartilhar a minha experiência como engenheiro de software atuando focado com tecnologias de Generative AI, fique atento aos próximos posts para aprender um pouco mais sobre este tópico.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Ao pesquisar um pouco sobre o mundo de Large Language Models é natural que você se depare com os grandes fornecedores de modelos como OpenAI, Anthropic, etc. Estas empresas fornecem seus modelos proprietários no formato SaaS através de um serviço que pode ser acessado por uma API desde que você tenha uma conta e pague um valor pelo seu uso.&lt;/p&gt;</description><content:encoded><![CDATA[<blockquote>
+<p>Estou iniciando uma série de artigos para compartilhar a minha experiência como engenheiro de software atuando focado com tecnologias de Generative AI, fique atento aos próximos posts para aprender um pouco mais sobre este tópico.</p>
+</blockquote>
+<p>Ao pesquisar um pouco sobre o mundo de Large Language Models é natural que você se depare com os grandes fornecedores de modelos como OpenAI, Anthropic, etc. Estas empresas fornecem seus modelos proprietários no formato SaaS através de um serviço que pode ser acessado por uma API desde que você tenha uma conta e pague um valor pelo seu uso.</p>
+<p>No entanto, nem só de modelos proprietários vive o universo de LLM&rsquo;s, muitos modelos são disponibilizados de forma open source, o que significa que você pode baixá-los e executá-los como quiser.</p>
+<p>Apesar de parece simples, detalhes como arquitetura do modelo, configurações e requisitos de hardware podem tornar a tarefa significativamente árdua para um desenvolvedor que simplesmente quer testar diferentes modelos.</p>
+<p>Para atender essa demanda, existem algumas iniciativas que tornam este trabalho mais simples, uma delas é o <a href="https://github.com/ollama/ollama">ollama</a></p>
+<h2 id="ollama">Ollama</h2>
+<p>O ollama é um projeto open source que tem como objetivo facilitar a nossa experiência para obter e rodar LLM&rsquo;s.
+Ele pode ser <a href="https://ollama.com/download">instalado na sua máquina</a> e fornece um cli através do qual baixar e executar uma LLM é tão simples quanto executar este comando</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">ollama run llama3.2</span></span></code></pre></div><p>Imediatamente após a execução desde comando, caso você ainda não tenha este modelo localmente ele irá fazer o download do mesmo e logo em seguida fornecer uma iteração com o modelo via linha comando.</p>
+<p>Você também pode optar por executar o ollama dentro de um container docker, desde que você já tenha o docker instalado basta executar:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">docker run -it -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama</span></span></code></pre></div><p>Em seguida para executar o modelo:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">docker <span class="nb">exec</span> -it ollama ollama run llama3.2</span></span></code></pre></div><p>Nos exemplos acima, estamos executando o modelo <code>llama3.2</code>, para saber a lista de modelos disponíveis, consulte o <a href="https://ollama.com/library">catálogo do ollama</a></p>
+<p>Esta solução já atende grande parte das necessidades, mas ela pode melhorar.
+O serviço do ollama também disponibiliza uma API para comunicação com o modelo, e devido a isso podemos tanto fazer requisições http como também podemos projetar um interface gráfica para facilitar nosso dia a dia, e neste ponto entra a nossa próxima ferramenta que irá nos ajudar, a <a href="https://github.com/open-webui/open-webui">OpenWebUI</a>.</p>
+<h2 id="openwebui">OpenWebUI</h2>
+<p>O OpenWebUI é um projeto opensource que fornece uma interface padronizada de chat conversacional para testar LLM&rsquo;s, pode ser usada em conjunto com o ollama que assume o papel de servir as LLM&rsquo;s localmente.</p>
+<p>Você pode instalar o OpenWebUI via <code>pip</code> com o comando (recomendamos que você crie um ambiente virtual antes de instalar</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">pip install open-webui</span></span></code></pre></div><p>Em seguida rodar o servidor web com</p>
+
+
+
+
+
+<pre tabindex="0"><code>open-webui serve</code></pre><p>Acessando o endereço http://localhost:8080 você verá uma tela parecida com esta.</p>
+<p>O OpenWebUI também pode ser executado via docker e tem compatibilidade total com o ollama, caso queira consumir os modelos do ollama, execute o comando abaixo (considerando que você já tem um container docker de nome ollama sendo executado)</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">docker run -d -p 3000:8080 --add-host<span class="o">=</span>host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main</span></span></code></pre></div><p>Neste caso, após a execução, basta esperar alguns segundos (o servidor do OpenWebUI pode demorar um pouco para subir) e acessar o endereço <code>http://localhost:3000</code></p>
+<p>Os modelos servidos pelo ollama estarão disponíveis e você poderá conversar com eles, semelhante ao exemplo à seguir:</p>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/s7nemvg10btie6lfyfpl.png" alt="print da tela mostrando a interface web do serviço openwebui em um chat com o modelo llama 3.2"></p>
+<h2 id="bônus-executando-tudo-com-um-comando">Bônus, executando tudo com um comando</h2>
+<p>Para quem achar muito trabalhoso, eu disponibilizei um projeto no github por onde você pode subir todo este ambiente e os serviços com apenas um comando.
+O projeto está disponível aqui: <a href="https://github.com/hebertrfreitas/generative-ai-labs/tree/main/examples/ollama">https://github.com/hebertrfreitas/generative-ai-labs/tree/main/examples/ollama</a></p>
+]]></content:encoded></item><item><title>Murmurhash - criando um rollout progressivo via backend</title><link>https://hebertrfreitas.github.io/blog/creating-a-progressive-rollout-using-murmurhash/</link><pubDate>Fri, 21 Apr 2023 00:00:00 +0000</pubDate><author>hebertrfreitas@gmail.com (Hebert Freitas)</author><guid>https://hebertrfreitas.github.io/blog/creating-a-progressive-rollout-using-murmurhash/</guid><description>&lt;p&gt;Ao ler o título deste post o desenvolvedor mais experiente provavelmente vai se perguntar: &amp;ldquo;Mas já não existem várias formas de se liberar uma nova funcionalidade para usuários progressivamente ?&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;E a resposta é sim, de fato existem algumas maneiras.
+Por exemplo, se você estiver em um ambiente com k8s e istio pode por exemplo usar um &lt;a href="https://istio.io/latest/docs/reference/config/networking/virtual-service/"&gt;Virtual Service para isso&lt;/a&gt;, você ainda pode fazer isso fora mesmo do k8s com um simples proxy reverso na frente de instâncias diferentes da sua aplicação (uma com a nova feature, e outra sem) além de várias outras.&lt;/p&gt;</description><content:encoded><![CDATA[<p>Ao ler o título deste post o desenvolvedor mais experiente provavelmente vai se perguntar: &ldquo;Mas já não existem várias formas de se liberar uma nova funcionalidade para usuários progressivamente ?&rdquo;</p>
+<p>E a resposta é sim, de fato existem algumas maneiras.
+Por exemplo, se você estiver em um ambiente com k8s e istio pode por exemplo usar um <a href="https://istio.io/latest/docs/reference/config/networking/virtual-service/">Virtual Service para isso</a>, você ainda pode fazer isso fora mesmo do k8s com um simples proxy reverso na frente de instâncias diferentes da sua aplicação (uma com a nova feature, e outra sem) além de várias outras.</p>
+<p>Porem aqui neste artigo, vou lhe apresentar uma forma de atingir o mesmo objetivo usando um algoritmo de hash bem conhecido, o <a href="https://en.wikipedia.org/wiki/MurmurHash">Murmurhash</a> que pode ser bem útil dependendo do seu cenário.</p>
+<p>###Murmurhash</p>
+<p>O murmurhash é um algoritmo de hash não criptográfico.</p>
+<p>Ser um algoritmo de hash significa que dado um input ele converte isso para um output encriptado.
+Quer um exemplo simples no nosso dia a dia ?
+Se você estiver em um linux ou mac pode usar o sha256 da seguinte maneira:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="ln">1</span><span class="cl"><span class="nb">echo</span> -n teste de mensagem sha256 <span class="p">|</span> shasum -a <span class="m">256</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">8785c54a5c506d0c4f031a76b7170c35b2bde862a2bbd7ab2d0485570b75bc06</span></span></code></pre></div><p>Já a parte do não criptográfico se refere ao fato de muitas funções hash terem como principal característica tornar impossível a reversão da saída de volta no texto original, o que é especialmente útil se você estiver trabalhando com segurança onde isto é uma premissa. Este não é o caso do murmurhash que não se preocupa tanto com esta característica em detrimento de outras.</p>
+<p>Ao contrário da família de algoritmos criptográficos, o murmurhash foi criado para ser rápido devido a sua otimização, com uma boa resistência a colisões e outras características interessantes.
+O algoritmo Murmurhash foi criado por Austin Appleby e a implementação de referência em C++ pode ser encontrada no <a href="https://github.com/aappleby/smhasher/blob/master/src/MurmurHash3.cpp">github</a>.</p>
+<p>Para demonstrar um pouco do que o algoritmo pode fazer, vamos olhar um simples código em java:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln">1</span><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#34;hebert freitas&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">        </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">inputBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="na">getBytes</span><span class="p">(</span><span class="n">Charset</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">&#34;UTF8&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="w">        </span><span class="n">HashCode</span><span class="w"> </span><span class="n">hashCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Hashing</span><span class="p">.</span><span class="na">murmur3_128</span><span class="p">().</span><span class="na">hashBytes</span><span class="p">(</span><span class="n">inputBytes</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="w">        </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">outputBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hashCode</span><span class="p">.</span><span class="na">asBytes</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="w">    </span><span class="p">}</span></span></span></code></pre></div><p>Neste simples código estamos aplicando o murmurhash e fazendo o hash de um array de bytes que foi gerado a partir de uma simples string com o meu nome.
+Optei por usar uma implementação do <a href="https://github.com/google/guava/blob/v31.1/guava/src/com/google/common/hash/Murmur3_128HashFunction.java">murmurhash disponível dentro da lib guava</a> mas nada lhe impede de usar outra implementação.</p>
+<p>O algoritmo do murmurhash é também determinístico, de maneira que para uma mesma entrada sempre haverá uma mesma saída.</p>
+<p>Neste exemplo, estamos optando por pegar o resultado do hash também como um array de bytes, mas seria possível também pegar o resultado como um inteiro ou long.</p>
+<p>Todas estas características fazem com que o murmurhash seja usado em cenários interessantes, vamos ver a seguir um possível cenário.</p>
+<h3 id="aplicabilidade">Aplicabilidade</h3>
+<p>Você sabia que quando usa a lib para interagir com o <a href="https://pt.wikipedia.org/wiki/Apache_Kafka">kafka</a> na sua aplicação o murmurhash é usado por debaixo dos panos para definir em qual partição de um tópico a mensagem será postada com base na sua key ?
+A referencia pode ser vista <a href="https://github.com/apache/kafka/blob/6cf1010a6bf3bd6a9e0495c4787eb5b3aa01d5e8/clients/src/main/java/org/apache/kafka/clients/producer/internals/BuiltInPartitioner.java#L328">aqui</a> e basicamente o que é feito é usar o murmurhash aplicado a key da mensagem e busca o resto da divisão sobre o total de partições.
+Lembram-se também do fato de que o kafka consegue garantir a ordenão de mensagem apenas dentro de uma partição de um tópico mas não dentro de todas as partições ?
+Eis outro benefício do murmurhash neste cenário, como sempre teremos o mesmo valor de saída para a mesma entrada mensagens com a mesma key sempre serão direcionadas para a mesma partição.
+O murmurhash também é muito eficaz no chamado <a href="https://en.wikipedia.org/wiki/Avalanche_effect">efeito avalanche</a> que nada mais é do que uma característica onde caso modifiquemos minimamente o input teremos um resultado totalmente diferente,  e devido a isso, também é eficaz em distribuir uniformemente entre as partições de um tópico mensagens com keys distintas.</p>
+<p>A seguir vamos ver como algumas destas características podem ser aplicadas em um cenário real.</p>
+<h3 id="criando-um-rollout-progressivo-com-o-murmurhash">Criando um rollout progressivo com o murmurhash</h3>
+<p>Imagine que você está diante do seguinte cenário:
+&ldquo;Uma determinada aplicação possui uma base de usuários relativamente grande e você deseja liberar uma nova funcionalidade que foi implementada de forma progressiva para estes usuários, primeiro para 10% da base, depois 20%, e assim sucessivamente até atingir todos os usuários&rdquo;</p>
+<p>Uma das melhores formas de fazer isso é implementar uma feature toogle que permite ligar ou desligar a nova feature na sua aplicação, mas neste caso, não pode ser uma toogle estática que representa o mesmo valor para todos os usuário da aplicação, ela teria que identificar se um determinado cliente entraria ou não nela naquele determinado momento baseado em alguma lógica.
+Uma outra alternativa que você pode pensar é marcar os seus usuários na base de dados dizendo quem entra e quem não, atualizando isso aos poucos conforme você vai expandindo o fluxo, mas esta solução não parece ser muito eficiente e de difícil manutenção.</p>
+<p>Para atender essa demanda podemos aplicar o murmurhash, usando como input alguma coisa que sempre seja única e nunca mude para um usuário ( id, cpf, etc)
+Vamos ver um simples exemplo:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln">1</span><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">calculatePercentage</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">userId</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">        </span><span class="n">HashCode</span><span class="w"> </span><span class="n">hashCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Hashing</span><span class="p">.</span><span class="na">murmur3_32_fixed</span><span class="p">().</span><span class="na">hashBytes</span><span class="p">(</span><span class="n">userId</span><span class="p">.</span><span class="na">getBytes</span><span class="p">(</span><span class="n">Charset</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="s">&#34;UTF8&#34;</span><span class="p">)));</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">hashedValueInLong</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Integer</span><span class="p">.</span><span class="na">toUnsignedLong</span><span class="p">(</span><span class="n">hashCode</span><span class="p">.</span><span class="na">asInt</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="n">percentual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hashedValueInLong</span><span class="w">  </span><span class="o">/</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="na">pow</span><span class="p">(</span><span class="n">2</span><span class="p">,</span><span class="n">32</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;Percentual: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">percentual</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">percentual</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="w">    </span><span class="p">}</span></span></span></code></pre></div><p><strong>Detalhando cada um dos passos:</strong></p>
+<ol>
+<li>Aplicamos o murmurhash a uma string de input da mesma maneira que fizemos ateriormente.</li>
+<li>Pegamos o resultado do murmurhash como um inteiro e convertermos para um unsigned long (vamos aprofundar este detalhe a seguir)</li>
+<li>Dividimos o numero resultado do murmurhash por 2 elevado a 32 porque este é o valor máximo que pode ser atingido.</li>
+<li>O resultado é um percentual, um valor em 0.1 e 1.0 aplicado a um usuário.</li>
+</ol>
+<p>Neste exemplo, estamos usando a versão de 32 bits do murmurhash, que pode gerar um hash de até 32 bits.
+Na linha 3 do código convertermos um int para um long usando porque valores inteiros podem ser negativos e esta é uma forma simples de se obter o valor sem sinal, para mais detalhes veja a <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html#toUnsignedLong-int-">documentação do método <code>Integer.toUnsignedLong</code></a>
+Se você executar este método com o input <code>836d473d-56be-4ef9-9b13-1fc8f36ef98e</code> terá como resultado o valor <code>0.913...</code>.
+Com este valor basta comparar com o percentual máximo que você deseja disponibilizar a nova feature. Neste exemplo, se estivermos liberando para 20% da base com certeza este usuário não entraria, mas se já estivermos liberando para 95% da base este usuário entraria porque seu percentual é 91%.</p>
+<h3 id="é-possível-ter-exatidão-máxima-com-este-método-">É possível ter exatidão máxima com este método ?</h3>
+<p>Considerando as características do algoritmo murmurhash ele funciona melhor conforme o publico alvo vai aumentando, ou neste caso, conforme maior é sua base de usuários.</p>
+<h3 id="projeto-de-exemplo">Projeto de exemplo</h3>
+<p>Para exemplificar tudo o que discutimos criei um projeto de exemplo, onde a partir de uma lista fictícia de 10.000 usuários e um valor predeterminado de 10% classificamos esta lista para demonstrar que o algoritmo consegue distribuir uniformemente os hashs e filtrar um valor muito próximo de 10% de usuários mesmo sem conhecer toda a base.</p>
+<p>O projeto está disponível neste link = <a href="https://github.com/hebertrfreitas/murmurhash-example">https://github.com/hebertrfreitas/murmurhash-example</a></p>
+]]></content:encoded></item><item><title>DynamoDB local - Um mock funcional para o DynamoDB</title><link>https://hebertrfreitas.github.io/blog/dynamodb-local/</link><pubDate>Sun, 13 Feb 2022 00:00:00 +0000</pubDate><author>hebertrfreitas@gmail.com (Hebert Freitas)</author><guid>https://hebertrfreitas.github.io/blog/dynamodb-local/</guid><description>&lt;p&gt;Recentemente escrevi um &lt;a href="https://dev.to/hebertrfreitas/localstack-um-mock-funcional-para-os-servicos-da-aws-1jkd"&gt;post&lt;/a&gt; sobre o localstack, que fornece um mock funcional para os principais serviços da aws.&lt;/p&gt;
+&lt;p&gt;Porém, caso você esteja trabalhando especificamente com o &lt;a href="https://aws.amazon.com/pt/dynamodb/"&gt;DynamoDB&lt;/a&gt; a aws fornece oficialmente uma ferramenta chamada &lt;a href="https://docs.aws.amazon.com/pt_br/amazondynamodb/latest/developerguide/DynamoDBLocal.html"&gt;DynamoDB local&lt;/a&gt; que é recomendada para testes e desenvolvimento da aplicação sem se conectar aos serviços reais da aws.
+Neste artigo vamos entender um pouco como funciona esta ferramenta 😀&lt;/p&gt;
+&lt;h2 id="índice"&gt;Índice&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://hebertrfreitas.github.io/blog/dynamodb-local/#como-usar"&gt;Como Usar&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://hebertrfreitas.github.io/blog/dynamodb-local/#usando-via-docker"&gt;Usando via Docker&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;[Aplicação de exemplo] (#aplicacao-exemplo)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="como-usar"&gt;Como usar &lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/h3&gt;
+&lt;p&gt;O DynamoDB local convenientemente é fornecido de três formas:&lt;/p&gt;</description><content:encoded><![CDATA[<p>Recentemente escrevi um <a href="https://dev.to/hebertrfreitas/localstack-um-mock-funcional-para-os-servicos-da-aws-1jkd">post</a> sobre o localstack, que fornece um mock funcional para os principais serviços da aws.</p>
+<p>Porém, caso você esteja trabalhando especificamente com o <a href="https://aws.amazon.com/pt/dynamodb/">DynamoDB</a> a aws fornece oficialmente uma ferramenta chamada <a href="https://docs.aws.amazon.com/pt_br/amazondynamodb/latest/developerguide/DynamoDBLocal.html">DynamoDB local</a> que é recomendada para testes e desenvolvimento da aplicação sem se conectar aos serviços reais da aws.
+Neste artigo vamos entender um pouco como funciona esta ferramenta 😀</p>
+<h2 id="índice">Índice</h2>
+<ul>
+<li><a href="/blog/dynamodb-local/#como-usar">Como Usar</a></li>
+<li><a href="/blog/dynamodb-local/#usando-via-docker">Usando via Docker</a></li>
+<li>[Aplicação de exemplo] (#aplicacao-exemplo)</li>
+</ul>
+<h3 id="como-usar">Como usar <!-- raw HTML omitted --><!-- raw HTML omitted --></h3>
+<p>O DynamoDB local convenientemente é fornecido de três formas:</p>
+<ul>
+<li>Como um programa java executável (arquivo .jar)</li>
+<li>Através de uma imagem docker</li>
+<li>Através de uma dependência do maven</li>
+</ul>
+<p>A página de <a href="https://docs.aws.amazon.com/pt_br/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html">documentação</a> dá detalhes sobre o uso de cada uma destas opções. Neste post utilizaremos a opção via imagem docker.</p>
+<h3 id="utilizando-o-dynamodb-local-via-docker">Utilizando o DynamoDB local via docker <!-- raw HTML omitted --><!-- raw HTML omitted --></h3>
+<p>Se você apenas executar o comando à seguir no seu terminal(assumindo que você tem o docker instalado corretamente) já terá o dynamodb local rodando na porta 8000</p>
+
+
+
+
+
+<pre tabindex="0"><code>docker run -p 8000:8000 amazon/dynamodb-local</code></pre><p>E sim, você já consegue apontar a sua aplicação para ele 😁, vamos demonstrar isso no no tópico em que construímos uma [aplicação de exemplo] (#aplicacao-exemplo).</p>
+<p>Por padrão o entrypoint executado pela imagem docker oficial irá utilizar a propriedade <code>-inMemory</code> que significa que o dynamo irá manter todos os dados em memória, logo ao finalizar o container automaticamente os dados são perdidos.</p>
+<p>Eventualmente vamos querer manter os arquivos e dados do banco de dados criados via container docker mesmo após a finalização do mesmo, para isso segue o conteúdo de um arquivo docker compose que explora um pouco mais as opções disponíveis.</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.8&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="w">  </span><span class="nt">dynamodb-local</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">    </span><span class="nt">working_dir</span><span class="p">:</span><span class="w"> </span><span class="l">/home/dynamodblocal</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;-jar DynamoDBLocal.jar -sharedDb -dbPath ./data&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;amazon/dynamodb-local:latest&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">dynamodb-local</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">      </span>- <span class="s2">&#34;8000:8000&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="w">      </span>- <span class="s2">&#34;.dynamodbdata:/home/dynamodblocal/data&#34;</span></span></span></code></pre></div><blockquote>
+<p>Para utilizar estas instruções, salve o conteúdo em um arquivo chamado <code>docker-compose.yaml</code> e em seguida execute o comando <code>docker-compose up</code>.</p>
+</blockquote>
+<p>Algumas observações sobre a configuração realizar no docker compose:</p>
+<ol>
+<li>sobrescrevemos o comando inicial executado ao subir o container na linha <code>command:</code>, observe que não colocamos o comando <code>java</code> porque ele já é especificado no entrypoint default da imagem docker fornecida pela aws.</li>
+<li>utilizamos o parâmetro <code>-sharedDb</code> para informar ao dynamo que desejamos criar um único arquivo para armazenar os bancos de dados.</li>
+<li>o parâmetros <code>-dbPath ./data</code> informa onde queremos que o arquivo de banco de dados seja salvo. Como o workdir foi definido para <code>/home/dynamodblocal</code> o banco de dados será salvo no caminho absoluto <code>/home/dynamodblocal/data</code> dentro do container.</li>
+<li>Criamos um volume apontando o caminho <code>.dynamodbdata</code> da máquina host para <code>/home/dynamodblocal/data</code> dentro do container, logo todos os arquivos de banco de dados gerados pelo dynamo serão mapeados para lá.</li>
+</ol>
+<p>Ao executar o comando <code>docker-compose up</code> na pasta com o arquivo de conteúdo exemplificado acima podemos observar que será criada a pasta <code>.dynamodbdata</code> a princípio vazia.</p>
+<p>Caso você tenha o <a href="https://aws.amazon.com/pt/cli/">aws-cli</a> instalado na sua máquina, é perfeitamente possível executar comandos apontando para o dynamodb local, basta inserir o parâmetro <code>--endpoint-url=http://localhost:8000</code>.</p>
+<p>Por exemplo, para listar as tabelas existentes:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="ln">1</span><span class="cl">aws --endpoint-url http://localhost:8000 dynamodb list-tables</span></span></code></pre></div><h3 id="aplicação-de-exemplo">Aplicação de exemplo <!-- raw HTML omitted --><!-- raw HTML omitted --></h3>
+<p>Para demonstrar o uso do dynamodb local construi uma pequena api usando spring boot e kotlin, o código está disponível no <a href="https://github.com/hebertrfreitas/dynamodb-example">github</a>.</p>
+<p>Nesta aplicação estamos usando a biblioteca <a href="https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/dynamodb-enhanced-client.html">dynamodb-enhanced</a> que faz parte do AWS sdk for java (v2) e fornece uma maneira bem intuitiva de mapear as tabelas dynamo na sua aplicação via anotações.</p>
+<p>Para que a aplicação possa se comunicar com o dynamo é necessário criar um objeto do tipo <code>software.amazon.awssdk.services.dynamodb.DynamoDbClient</code> na aplicação fizemos isso provisionando um <code>bean</code> do spring da seguinte maneira:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="ln"> 1</span><span class="cl">    <span class="nd">@Bean</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">    <span class="k">fun</span> <span class="nf">dynamoDBClient</span><span class="p">():</span><span class="n">DynamoDbClient</span><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">        <span class="k">return</span> <span class="nc">DynamoDbClient</span><span class="p">.</span><span class="n">builder</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">            <span class="p">.</span><span class="n">region</span><span class="p">(</span><span class="n">awsProperties</span><span class="p">.</span><span class="n">regionAsAwsEnum</span><span class="p">())</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">            <span class="p">.</span><span class="n">apply</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">                <span class="k">if</span><span class="p">(!</span> <span class="n">awsProperties</span><span class="p">.</span><span class="n">endpoint</span><span class="p">.</span><span class="n">isNullOrEmpty</span><span class="p">())</span> 
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">                    <span class="n">endpointOverride</span><span class="p">(</span><span class="n">URI</span><span class="p">(</span><span class="n">awsProperties</span><span class="p">.</span><span class="n">endpoint</span><span class="p">))</span> <span class="c1">//awsProperties.endpoint = http://localhost:8000 
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">            <span class="p">.</span><span class="n">credentialsProvider</span><span class="p">(</span><span class="nc">DefaultCredentialsProvider</span><span class="p">.</span><span class="n">builder</span><span class="p">().</span><span class="n">build</span><span class="p">())</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">            <span class="p">.</span><span class="n">build</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">    <span class="p">}</span></span></span></code></pre></div><p>Observe que chamamos no builder o método <code>endpointOverride</code> apenas se <code>awsProperties.endpoint</code> for diferente de nulo.
+A ideia aqui é passar nessa propriedade o valor <code>http://localhost:8000</code> exatamente como fizemos no aws-cli, apontando para onde está rodando o DynamoDB local na sua máquina.
+Se você não passar essa propriedade o builder não executara este ponto e apontará para o serviço real da aws.</p>
+<p>Nesta api estamos fazendo um simples crud de um cenário hipotético onde queremos cadastrar pintores famosos e suas pinturas.</p>
+<p>A estrutura básica pensada para o modelo de dados pode ser representada da seguinte maneira em json</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">    <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;123&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Leonardo da Vinci&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">    <span class="nt">&#34;birthdate&#34;</span><span class="p">:</span> <span class="s2">&#34;1452-04-15&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">    <span class="nt">&#34;paintings&#34;</span><span class="p">:[</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">            <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Mona Lisa (La Gioconda)&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">            <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;Louvre, Paris&#34;</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl">            <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;The Last Supper&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">            <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;Santa Maria delle Grazie, Milan&#34;</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="p">}</span></span></span></code></pre></div><p>Esta estrutura pode ser facilmente mapeada para classes através da anotações, segue exemplo de como fizemos isso no código</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="cm"> * Important note: using `var` because the AWS SDK needs default `setters` in order to detect an attribute
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="nd">@DynamoDbBean</span>
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="k">class</span> <span class="nc">Painter</span><span class="p">(</span>
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">    <span class="nd">@get</span><span class="p">:</span><span class="n">DynamoDbPartitionKey</span> <span class="k">var</span> <span class="py">id</span><span class="p">:</span> <span class="n">String</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">    <span class="k">var</span> <span class="py">name</span><span class="p">:</span> <span class="n">String</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">    <span class="nd">@field</span><span class="p">:</span><span class="n">JsonFormat</span><span class="p">(</span><span class="n">pattern</span><span class="p">=</span><span class="s2">&#34;yyyy-MM-dd&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">    <span class="k">var</span> <span class="py">birthdate</span><span class="p">:</span> <span class="n">LocalDate</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>
+</span></span><span class="line"><span class="ln">10</span><span class="cl">    <span class="k">var</span> <span class="py">paintings</span><span class="p">:</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Paint</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">mutableListOf</span><span class="p">()</span>
+</span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="p">){</span>
+</span></span><span class="line"><span class="ln">12</span><span class="cl">    <span class="k">constructor</span><span class="p">():</span><span class="k">this</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="ln">14</span><span class="cl">
+</span></span><span class="line"><span class="ln">15</span><span class="cl">
+</span></span><span class="line"><span class="ln">16</span><span class="cl">
+</span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="nd">@DynamoDbBean</span>
+</span></span><span class="line"><span class="ln">18</span><span class="cl"><span class="k">class</span> <span class="nc">Paint</span><span class="p">(</span><span class="k">var</span> <span class="py">name</span><span class="p">:</span><span class="n">String</span><span class="p">?,</span> <span class="k">var</span> <span class="py">location</span><span class="p">:</span><span class="n">String</span><span class="p">?){</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl">    <span class="k">constructor</span><span class="p">():</span><span class="k">this</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="p">}</span></span></span></code></pre></div><blockquote>
+<p>OBS: Os contrutores default aceitando nulo e o uso de var são devido a requisitos do AWS SDK que necessita de classes com getters e setters padrão para que seja possível mapear as mesmas para o dynamo</p>
+</blockquote>
+<p>Para executar o projeto baixe o mesmo do github, em seguida na raiz execute</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">docker-compose up --build</span></span></code></pre></div><p>Isso irá subir um docker-compose
+contendo o dynamodb-local e também um container com o aws-cli que fará a criação da tabela inicial.</p>
+<p>Em seguida execute</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">./gradlew bootRun</span></span></code></pre></div><p>Este segundo comando irá subir a aplicação na porta 8080.</p>
+<blockquote>
+<p>OBS: O java 11 instalado é requisito para que você consiga executar o projeto.</p>
+</blockquote>
+<p>A api está documentada com swagger então é possível acessar o mesmo no endereço <code>http://localhost:8080/swagger-ui.html</code></p>
+<p><img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/vkwf2mhhkc93vml7yapx.png" alt="Imagem do swagger-ui acessível no navegador"></p>
+<p>Para testar, seguem alguns comandos que podem ser executados via <code>curl</code></p>
+<p><strong>Criando um pintor</strong></p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln"> 1</span><span class="cl">curl --location --request POST <span class="s1">&#39;localhost:8080/painters&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl">--header <span class="s1">&#39;Content-Type: application/json&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl">--data-raw <span class="s1">&#39;{
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="s1">    &#34;id&#34;: &#34;123&#34;,
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="s1">    &#34;name&#34;: &#34;Leonardo da Vinci&#34;,
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="s1">    &#34;birthdate&#34;: &#34;1452-04-15&#34;,
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="s1">    &#34;paintings&#34;:[
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="s1">        {
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="s1">            &#34;name&#34;: &#34;Mona Lisa (La Gioconda)&#34;,
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="s1">            &#34;location&#34;: &#34;Louvre, Paris&#34;
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="s1">        },
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="s1">        {
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="s1">            &#34;name&#34;: &#34;The Last Supper&#34;,
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="s1">            &#34;location&#34;: &#34;Santa Maria delle Grazie, Milan&#34;
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="s1">        }
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="s1">    ]
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="s1">}&#39;</span></span></span></code></pre></div><p><strong>Bucando um pintor pelo id</strong></p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">curl --location --request GET <span class="s1">&#39;localhost:8080/painters/123&#39;</span></span></span></code></pre></div><p><strong>Deletando um pintor</strong></p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl">curl --location --request DELETE <span class="s1">&#39;localhost:8080/painters/123&#39;</span></span></span></code></pre></div>]]></content:encoded></item><item><title>Localstack - Um mock funcional para os serviços da aws</title><link>https://hebertrfreitas.github.io/blog/localstack/</link><pubDate>Sun, 13 Feb 2022 00:00:00 +0000</pubDate><author>hebertrfreitas@gmail.com (Hebert Freitas)</author><guid>https://hebertrfreitas.github.io/blog/localstack/</guid><description>&lt;p&gt;Atualmente é bem comum trabalhar em projetos que se comuniquem com alguns serviços da aws, seja uma fila SQS, um bucket S3 para armazenar arquivos ou até mesmo um banco de dados DynamoDB.&lt;/p&gt;
+&lt;p&gt;Durante o desenvolvimento deste software você irá precisar fazer a comunicação com estes serviços em nuvem da aws para testar o seu produto, simular cenários ou até mesmo executar alguns testes de integração.&lt;/p&gt;
+&lt;p&gt;No entanto, nem sempre você terá disponível um ambiente na aws onde você possa alterar livremente de maneira que atenda os requisitos do desenvolvimento, ou mesmo que tenha, pode ser complexo fazer a comunicação em um primeiro momento.&lt;/p&gt;</description><content:encoded><![CDATA[<p>Atualmente é bem comum trabalhar em projetos que se comuniquem com alguns serviços da aws, seja uma fila SQS, um bucket S3 para armazenar arquivos ou até mesmo um banco de dados DynamoDB.</p>
+<p>Durante o desenvolvimento deste software você irá precisar fazer a comunicação com estes serviços em nuvem da aws para testar o seu produto, simular cenários ou até mesmo executar alguns testes de integração.</p>
+<p>No entanto, nem sempre você terá disponível um ambiente na aws onde você possa alterar livremente de maneira que atenda os requisitos do desenvolvimento, ou mesmo que tenha, pode ser complexo fazer a comunicação em um primeiro momento.</p>
+<p>Para resolver estes problemas, existe o projeto <a href="https://github.com/localstack/localstack">localstack</a>, que fornece um mock dos principais servicos da AWS como SQS, SNS, S3 entre outros.</p>
+<h3 id="como-usar-o-localstack">Como usar o localstack</h3>
+<p>A forma mais conveniente de executar o projeto é através de uma imagem docker oficial disponível neste link:  <a href="https://hub.docker.com/r/localstack/localstack">dockerhub localstack</a>, segue um exemplo de um arquivo do docker-compose:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.8&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="w">  </span><span class="nt">localstack</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;localstack&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">localstack/localstack:0.12.11</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">      </span>- <span class="s2">&#34;4566:4566&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">      </span>- <span class="s2">&#34;4571:4571&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">      </span>- <span class="l">SERVICES=sqs,s3</span></span></span></code></pre></div><p>Para executar este arquivo crie um arquivo yaml chamado docker-compose.yaml com o conteúdo acima e execute o comando <code>docker-compose up</code> na mesma pasta do arquivo criado.</p>
+<p>Alguns pontos importantes a se destacar:</p>
+<ul>
+<li>neste exemplo estamos usando a versão 0.12.11 mas você pode e deve checar qual versão mais atualizada está disponível no docker hub do projeto.</li>
+<li>a variável de ambiente <code>SERVICES</code> aceita uma lista de nomes dos serviços que desejamos provisionar, neste exemplo estamos pedindo ao localstack para disponibilizar uma api do SQS e uma do S3.</li>
+</ul>
+<h3 id="interagindo-com-os-serviços-da-aws-no-localstack">Interagindo com os serviços da aws no localstack</h3>
+<p>Uma das formas oficiais de se comunicar com os serviços da aws é o <a href="https://hub.docker.com/r/localstack/localstack">AWS CLI</a></p>
+<p>Você pode ter o awscli instalado na sua máquina e apontar para os serviços da aws mockados no localstack.
+Para fazer isso basta inserir em todos os comando o seguinte parâmetro: <code>--endpoint-url=http://localstack:4566</code></p>
+<p>Exemplo de criação de uma queue no SQS:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="ln">1</span><span class="cl">aws --endpoint-url<span class="o">=</span>http://localhost:4566 sqs create-queue --queue-name teste</span></span></code></pre></div><p>No entanto, caso você não queria ou não precise ter o <code>awscli</code> instalado no seu computador, o localstack já disponibiliza um wrapper do <code>awscli</code> chamado <code>awslocal</code> que já vem pré-configurado para interagir localmente com os serviços mockados da aws.</p>
+<p>Considerando que você esteja executando o projeto via docker é possível fazer o mesmo exemplo citado acima da seguinte maneira:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="ln">1</span><span class="cl"><span class="c1">#para entrar no container (considerando que o nome do seu container é localstack)</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">docker <span class="nb">exec</span> -it localstack sh
+</span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="c1">#comando equivalente ao apresentado acima para criar uma fila </span>
+</span></span><span class="line"><span class="ln">4</span><span class="cl">awslocal sqs create-queue --queue-name teste </span></span></code></pre></div><p>Observe que não precisamos adicionar o parâmetro <code>--endpoint-url</code> pois o <code>awslocal</code> já está configurado assumindo que desejo me comunicar com os serviços localmente.</p>
+<blockquote>
+<p><strong>⚠ Porque localhost:4566 ?</strong><br>
+O projeto localstack disponibiliza o mock dos serviços da aws na porta 4566.</p>
+<p>Considerando que você está executando o projeto via docker é importante que você mapeie a porta 4566 do container para a 4566(ou outra a seu critério) da sua máquina local, foi isso que fizemos no arquivo de exemplo do docker-compose.</p>
+</blockquote>
+<h3 id="como-executar-comandos-no-startup-do-container">Como executar comandos no startup do container</h3>
+<p>Caso você queira executar comandos após o startup do container como criar um bucket no s3 ou inicializar uma fila sqs basta criar um arquivo .sh com a lista de comandos e montá-lo como volume na pasta <code>/docker-entrypoint-initaws.d</code> dentro do container.</p>
+<p>Ao iniciar, o localstack irá executar todos os scripts existentes neste caminho.
+Sendo assim nosso docker-compose ficaria com a seguinte configuração:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="w">    </span><span class="nt">localstack</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="w">      </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;localstack&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">localstack/localstack:0.12.11</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">      </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="w">        </span>- <span class="s2">&#34;4566:4566&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">        </span>- <span class="s2">&#34;4571:4571&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">      </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">        </span>- <span class="l">SERVICES=sqs,s3</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w"> 
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">        </span>- <span class="l">./init-scripts:/docker-entrypoint-initaws.d</span><span class="w"> </span><span class="c">#mapeamento do volume</span></span></span></code></pre></div><p>Agora podemos criar a pasta <code>init-scripts</code> na raiz do projeto e um arquivo shell script <code>startup.sh</code> dentro dela com alguns comandos por exemplo:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="ln">1</span><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;creating test bucket&#39;</span>
+</span></span><span class="line"><span class="ln">2</span><span class="cl">awslocal s3api create-bucket --bucket test-bucket
+</span></span><span class="line"><span class="ln">3</span><span class="cl">
+</span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;listing buckets&#39;</span>
+</span></span><span class="line"><span class="ln">5</span><span class="cl">awslocal s3api list-buckets</span></span></code></pre></div><p>A estrutura do projeto deverá ficar da seguinte maneira:</p>
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="ln">1</span><span class="cl"> .
+</span></span><span class="line"><span class="ln">2</span><span class="cl">├── docker-compose.yaml
+</span></span><span class="line"><span class="ln">3</span><span class="cl">└── init-scripts
+</span></span><span class="line"><span class="ln">4</span><span class="cl">    └── startup.sh</span></span></code></pre></div><p>Se executar o comando <code>docker-compose up</code> após o startup inicial você verá as mensagens do script sendo executado.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1627764858619/9HfzKFprK.png" alt="Screen Shot 2021-07-31 at 17.53.36.png"></p>
+<p>O conteúdo deste post está disponível no github no endereço: <a href="https://github.com/hebertrfreitas/localstack-docker">https://github.com/hebertrfreitas/localstack-docker</a></p>
+]]></content:encoded></item></channel></rss>
