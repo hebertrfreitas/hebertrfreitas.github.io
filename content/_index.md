@@ -4,9 +4,22 @@ menu: "main"
 weight: 1
 ---
 
-# ᕦʕ •ᴥ•ʔᕤ Bear Cub
+Hello, my name is Hebert Ribeiro de Freitas.
 
-Today's websites are bloated, slow, and full of scripts, ads, and trackers. This
+I'm a brazilian sofware engineer.
+
+This website is a simple space to share my ideas, studies and anything else.
+
+How to contact me:
+
+ - [github](https://github.com/hebertrfreitas)
+ - [linkedin](https://www.linkedin.com/in/hebert-ribeiro-de-freitas-60262821/)
+ - [Mastodon](https://mastodon.social/@hebertrfreitas)
+
+
+<!-- # ᕦʕ •ᴥ•ʔᕤ Bear Cub -->
+
+<!-- Today's websites are bloated, slow, and full of scripts, ads, and trackers. This
 became so commonplace that we lost all sense of perspective, to the point that
 we now think multi-megabyte webpages are normal.
 
@@ -32,4 +45,4 @@ upgrades. It's also compatible with modern
 [security](https://github.com/clente/hugo-bearcub#secure) standards, so your
 users don't have to worry about browsing your website.
 
-Made with 💟 by [Caio lente](https://lente.dev/en).
+Made with 💟 by [Caio lente](https://lente.dev/en). -->
