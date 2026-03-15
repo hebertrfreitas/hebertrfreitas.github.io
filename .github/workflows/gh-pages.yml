@@ -22,7 +22,7 @@ jobs:
           extended: true
 
       - name: Build
-        run: hugo --minify --gc --destination ./public --source ./ --themesDir ./themes --baseURL https://clente.github.io/hugo-bearcub/
+        run: hugo --minify --gc --destination ./public --source ./ --themesDir ./themes --baseURL https://hebertrfreitas.github.io
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
