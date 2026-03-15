@@ -1,7 +1,7 @@
 # Basic config
 baseURL = "https://hebertrfreitas.github.io"
 theme = "hugo-bearcub"
-copyright = "Hebert Freitas (CC BY 4.0)"
+copyright = "Hebert Freitas"
 defaultContentLanguage = "en"
 
 # Generate a nice robots.txt for SEO
