@@ -39,8 +39,12 @@ enableRobotsTXT = true
       madeWith = "Feito com [Bear Cub](https://github.com/clente/hugo-bearcub)"
 
 [params]
+  
   # The description of your website
   description = "Bear Cub Demo"
+
+  #google analytics
+  googleAnalytics = "G-T2VRWRNE7Y" 
 
   # The path to your favicon
   favicon = "images/favicon.png"
@@ -88,3 +92,16 @@ enableRobotsTXT = true
   [params.author]
     name = "Hebert Freitas" # Your name as shown in the RSS feed metadata
     email = "hebertrfreitas@gmail.com" # Added to the footer so readers can reply to posts
+
+  [params.giscus]
+    repo = "hebertrfreitas/hebertrfreitas.github.io"
+    repoID = "MDEwOlJlcG9zaXRvcnkzOTE1MTQ1MTc="
+    category = "blog_posts"
+    categoryID = "DIC_kwDOF1YJlc4C4e87"
+    mapping = "og:title"
+    reactionsEnabled = "1"
+    emitMetadata = "0"
+    inputPosition = "bottom"
+    theme = "preferred_color_scheme"
+    lang = "en"
+    loading = "lazy"
