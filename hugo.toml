@@ -38,13 +38,14 @@ enableRobotsTXT = true
     [languages.pt.params]
       madeWith = "Feito com [Bear Cub](https://github.com/clente/hugo-bearcub)"
 
+[services]
+  [services.googleAnalytics]
+    id = 'G-T2VRWRNE7Y'
+
 [params]
   
   # The description of your website
   description = "Bear Cub Demo"
-
-  #google analytics
-  googleAnalytics = "G-T2VRWRNE7Y" 
 
   # The path to your favicon
   favicon = "images/favicon.png"
