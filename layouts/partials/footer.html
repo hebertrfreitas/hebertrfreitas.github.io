@@ -1,0 +1,9 @@
+<small>
+  {{ .Site.Copyright }} | {{ markdownify .Site.Params.madeWith }}
+</small>
+
+
+<!-- Only load giscus on blog posts -->
+{{ if and (eq .Section "blog") (eq .Kind "page") }}
+  {{ partial "giscus.html" . }}
+{{ end }}
